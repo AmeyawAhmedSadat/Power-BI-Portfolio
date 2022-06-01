@@ -1,0 +1,56 @@
+---
+title: "K clustering"
+author: "Ameyaw Ahmed Analysis"
+date: '2022-05-14'
+output: html_document
+---
+
+```{r}
+library(stats)
+library(ggfortify)
+library(dplyr)
+library(ggplot2)
+library(openxlsx) # import from MS Excel
+library(factoextra)
+
+
+
+```
+
+```{r}
+Income <- read.xlsx( "Clusterop.xlsx", sheet ="Worksheet", rowNames=F)
+```
+
+
+```{r}
+wssplot <- function(data, nc=5, seed=1234){
+                  wss <- (nrow(data)-1)*sum(apply(data,2,var))
+                      for (i in 2:nc){
+                set.seed(seed)
+                    wss[i] <- sum(kmeans(data, centers=i)$withinss)}
+              plot(1:nc, wss, type="b", xlab="Number of Clusters",
+                            ylab="Within groups sum of squares")
+              wss
+       }
+```
+
+```{r}
+wssplot(Income) ## To find the optimal number of clusters, which is where the graph comes down. 
+```
+
+```{r K mean cluster analysis}
+KM <- kmeans(Income, 2)
+```
+
+```{r Evaluating the cluster analysis}
+autoplot(KM, Income, frame=TRUE)
+```
+
+```{r}
+KM$centers
+```
+
+
+
+
+
